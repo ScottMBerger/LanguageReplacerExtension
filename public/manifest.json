@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "My Extension",
-  "description": "This extension is a starting point to create a real Chrome extension",
+  "name": "Word Replacer",
+  "description": "Learn new words",
   "version": "0.0.1",
   "browser_action": {
     "default_popup": "index.html",
-    "default_title": "Open the popup"
+    "default_title": "Word Replacer"
   },
   "background": {
     "scripts": [
@@ -17,8 +17,20 @@
     "48": "logo-small.png",
     "128": "logo-small.png"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "all_frames": true,
+      "js": [
+        "app/content.js"
+      ]
+    }
+  ],
   "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'",
   "permissions": [
+    "activeTab",
     "webRequest",
     "webRequestBlocking"
   ]
