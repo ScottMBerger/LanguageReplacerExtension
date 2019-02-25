@@ -1,5 +1,9 @@
 .App {
   text-align: center;
   height: 800px;
-  width:600px;
+  width:500px;
+}
+
+TabBar {
+  height: 100%;
 }
