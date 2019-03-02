@@ -1,3 +1,4 @@
+/*global chrome*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,6 +10,10 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Checkbox from '@material-ui/core/Checkbox';
 import Avatar from '@material-ui/core/Avatar';
 
+import DeleteIcon from '@material-ui/icons/Delete';
+
+
+import IconButton from '@material-ui/core/IconButton';
 const styles = theme => ({
   root: {
     width: '100%',
@@ -19,22 +24,42 @@ const styles = theme => ({
 
 class CheckboxListSecondary extends React.Component {
   state = {
-    checked: [1],
+    lessons: []
   };
 
-  handleToggle = value => () => {
-    const { checked } = this.state;
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  constructor() {
+    super()
+    chrome.storage.sync.get('lessons', (items) => {
+      console.log('WORDS2: Settings retrieved', items);
+      this.setState({
+        lessons: items.lessons
+      });
 
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
+    });
+  }
+
+  handleDelete = index => () => {
+    const { lessons } = this.state;
+    const newLessons = [...lessons];
+
+    newLessons.splice(index, 1);
 
     this.setState({
-      checked: newChecked,
+      lessons: newLessons,
+    }, () => {
+      chrome.storage.sync.set({ 'lessons': this.state.lessons })
+    });
+  }
+
+  handleToggle = index => () => {
+    const { lessons } = this.state;
+    const newLessons = [...lessons];
+
+    newLessons[index].active = !newLessons[index].active
+    this.setState({
+      lessons: newLessons,
+    }, () => {
+      chrome.storage.sync.set({ 'lessons': this.state.lessons })
     });
   };
 
@@ -43,20 +68,18 @@ class CheckboxListSecondary extends React.Component {
 
     return (
       <List dense className={classes.root}>
-        {[0, 1, 2, 3].map(value => (
-          <ListItem key={value} button>
-            <ListItemAvatar>
-              <Avatar
-                alt={`Avatar n°${value + 1}`}
-                src={`/static/images/avatar/${value + 1}.jpg`}
-              />
-            </ListItemAvatar>
-            <ListItemText primary={`Line item ${value + 1}`} />
+        {this.state.lessons.map((lesson, index) => (
+          <ListItem key={index}>
+            <Checkbox
+              checked={lesson.active}
+              tabIndex={-1}
+              onClick={this.handleToggle(index)}
+            />
+            <ListItemText primary={`${lesson.name}`} />
             <ListItemSecondaryAction>
-              <Checkbox
-                onChange={this.handleToggle(value)}
-                checked={this.state.checked.indexOf(value) !== -1}
-              />
+              <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
+                <DeleteIcon />
+              </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
         ))}

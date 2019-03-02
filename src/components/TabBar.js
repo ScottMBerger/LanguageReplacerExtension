@@ -7,6 +7,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import './TabBar.css';
+import CheckboxListSecondary from '../ListView/list.js'
 
 function TabContainer({ children, dir }) {
     return (
@@ -64,7 +65,7 @@ class TabBar extends React.Component {
                     index={this.state.value}
                     onChangeIndex={this.handleChangeIndex}
                 >
-                    <TabContainer dir={theme.direction}>Item One</TabContainer>
+                    <TabContainer dir={theme.direction}><CheckboxListSecondary></CheckboxListSecondary></TabContainer>
                     <TabContainer dir={theme.direction}>Item Two</TabContainer>
                     <TabContainer dir={theme.direction}>Item Three</TabContainer>
                 </SwipeableViews>

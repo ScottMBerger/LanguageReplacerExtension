@@ -1,7 +1,13 @@
 (function () {
     chrome.storage.sync.get('lessons', function (items) {
         console.log('WORDS: Settings retrieved', items);
-        const words = Object.assign(...Object.values(items.lessons));
+        const selectedLessons = []
+        for (lesson in items.lessons) {
+            if (lesson.active) {
+                selectedLessons.push(lesson.words)
+            }
+        }
+        const words = Object.assign(...selectedLessons);
         start(words);
     });
 }());
