@@ -1,12 +1,15 @@
 (function () {
     chrome.storage.sync.get('lessons', function (items) {
+
         console.log('WORDS: Settings retrieved', items);
         const selectedLessons = []
-        for (lesson in items.lessons) {
-            if (lesson.active) {
-                selectedLessons.push(lesson.words)
+        for (const lesson in items.lessons) {
+            console.log('les', lesson)
+            if (items.lessons[lesson].active) {
+                selectedLessons.push(items.lessons[lesson].words)
             }
         }
+        console.log('selected lessons', selectedLessons)
         const words = Object.assign(...selectedLessons);
         start(words);
     });
