@@ -23,43 +23,28 @@ const styles = theme => ({
 
 class Library extends React.Component {
     state = {
-        lessons: []
     };
 
-    constructor() {
-        super()
-        chrome.storage.sync.get('lessons', (items) => {
-            console.log('WORDS2: Settings retrieved', items);
-            this.setState({
-                lessons: items.lessons
-            });
-
-        });
+    constructor(props) {
+        super(props)
     }
 
     handleDelete = index => () => {
-        const { lessons } = this.state;
+        const { lessons } = this.props.state;
         const newLessons = [...lessons];
 
         newLessons.splice(index, 1);
 
-        this.setState({
-            lessons: newLessons,
-        }, () => {
-            chrome.storage.sync.set({ 'lessons': this.state.lessons })
-        });
+        this.props.updateState({ lessons: newLessons })
     }
 
     handleActive = index => () => {
-        const { lessons } = this.state;
+        const { lessons } = this.props.state;
         const newLessons = [...lessons];
 
         newLessons[index].selected = !newLessons[index].selected
-        this.setState({
-            lessons: newLessons,
-        }, () => {
-            chrome.storage.sync.set({ 'lessons': this.state.lessons })
-        });
+
+        this.props.updateState({ lessons: newLessons })
     };
 
     startNew() {
@@ -70,6 +55,7 @@ class Library extends React.Component {
 
     render() {
         const { classes } = this.props;
+        const { lessons } = this.props.state;
 
         function PlusMinus(props) {
             if (props.selected) {
@@ -84,7 +70,7 @@ class Library extends React.Component {
                     <ListItem key="-1">
                         <NewInput></NewInput>
                     </ListItem>
-                    {this.state.lessons.map((lesson, index) => (
+                    {lessons.map((lesson, index) => (
                         <ListItem key={index}>
                             <IconButton aria-label="Comments" onClick={this.handleActive(index)}>
                                 <PlusMinus selected={lesson.selected} />

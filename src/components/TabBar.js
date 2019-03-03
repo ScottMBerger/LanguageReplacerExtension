@@ -34,7 +34,9 @@ class TabBar extends React.Component {
     state = {
         value: 0,
     };
-
+    constructor(props) {
+        super(props)
+    }
     handleChange = (event, value) => {
         this.setState({ value });
     };
@@ -66,8 +68,8 @@ class TabBar extends React.Component {
                     index={this.state.value}
                     onChangeIndex={this.handleChangeIndex}
                 >
-                    <TabContainer dir={theme.direction}><Active></Active></TabContainer>
-                    <TabContainer dir={theme.direction}><Library></Library></TabContainer>
+                    <TabContainer dir={theme.direction}><Active state={this.props.state} updateState={this.props.updateState}></Active></TabContainer>
+                    <TabContainer dir={theme.direction}><Library state={this.props.state} updateState={this.props.updateState}></Library></TabContainer>
                     <TabContainer dir={theme.direction}>Item Three</TabContainer>
                 </SwipeableViews>
             </div>
