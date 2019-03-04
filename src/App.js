@@ -21,9 +21,7 @@ class App extends Component {
 
   updateState = obj => {
     console.log('settings state')
-    this.setState({
-      obj
-    }, () => {
+    this.setState(obj, () => {
       chrome.storage.sync.set(obj)
     });
   }

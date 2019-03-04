@@ -27,15 +27,25 @@ const styles = theme => ({
 
 class NewInput extends React.Component {
     state = {
-        name: 'Cat in the Hat',
-        age: '',
-        multiline: 'Controlled',
-        currency: 'EUR',
+        input: '',
+        output: ''
     };
+
+    constructor(props) {
+        super(props)
+    }
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
+
+    handleAdd = () => {
+        this.props.handleAdd({ input: ` ${this.state.input} `, output: ` ${this.state.output} ` })
+        this.setState({
+            input: '',
+            output: ''
+        })
+    }
 
     render() {
         const { classes } = this.props;
@@ -44,20 +54,26 @@ class NewInput extends React.Component {
             <form className={classes.container} noValidate autoComplete="off">
                 <TextField
                     required
-                    id="standard-bare"
+                    id="input"
+                    name="input"
                     className={classes.textField}
                     defaultValue=""
+                    value={this.state.input}
                     margin="normal"
+                    onChange={this.handleChange('input')}
                 />
                 <TextField
                     required
-                    id="standard-bare"
+                    id="output"
+                    name="output"
                     className={classes.textField}
+                    value={this.state.output}
                     defaultValue=""
                     margin="normal"
+                    onChange={this.handleChange('output')}
                 />
 
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction onClick={this.handleAdd}>
                     <IconButton aria-label="Check">
                         <CheckIcon />
                     </IconButton>

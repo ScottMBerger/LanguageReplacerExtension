@@ -2,20 +2,21 @@
     chrome.storage.sync.get('lessons', function (items) {
 
         console.log('WORDS: Settings retrieved', items);
-        const selectedLessons = []
-        for (const lesson in items.lessons) {
+        let selectedLessons = []
+        for (const lesson of items.lessons) {
             console.log('les', lesson)
-            if (items.lessons[lesson].active) {
-                selectedLessons.push(items.lessons[lesson].words)
+            if (lesson.selected && lesson.active) {
+                selectedLessons = [...selectedLessons, ...lesson.words]
             }
         }
         console.log('selected lessons', selectedLessons)
         const words = Object.assign(...selectedLessons);
-        start(words);
+        start(selectedLessons);
     });
 }());
 function start(words) {
     console.time('contentTimer')
+    console.log('doing these', words)
     let dataStore = JSON.parse(localStorage.getItem('koreanData')) || {}
     var sortable = [];
     for (var count in dataStore) {
@@ -45,10 +46,10 @@ function start(words) {
     console.log('words', words)
     var korean = [], english = [], counter = 0;
 
-    for (word in words) {
+    for (const word of words) {
         if (!filterArr.includes(word)) {
-            english.push(word);
-            korean.push(words[word]);
+            english.push(word.input);
+            korean.push(word.output);
         }
     }
 

@@ -6,13 +6,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import NewInput from './newinput.js'
 import IconButton from '@material-ui/core/IconButton';
+import NewLesson from './newlesson'
 
 const styles = theme => ({
     root: {
@@ -32,9 +31,10 @@ class Library extends React.Component {
     handleDelete = index => () => {
         const { lessons } = this.props.state;
         const newLessons = [...lessons];
-
+        console.log('del', index, newLessons)
         newLessons.splice(index, 1);
 
+        console.log('del2', index, newLessons)
         this.props.updateState({ lessons: newLessons })
     }
 
@@ -52,6 +52,9 @@ class Library extends React.Component {
     }
 
 
+    componentDidUpdate() {
+        console.log('component updated', this.props)
+    }
 
     render() {
         const { classes } = this.props;
@@ -63,13 +66,9 @@ class Library extends React.Component {
             }
             return <AddIcon />
         }
-
         return (
             <div>
                 <List dense className={classes.root}>
-                    <ListItem key="-1">
-                        <NewInput></NewInput>
-                    </ListItem>
                     {lessons.map((lesson, index) => (
                         <ListItem key={index}>
                             <IconButton aria-label="Comments" onClick={this.handleActive(index)}>
@@ -84,9 +83,8 @@ class Library extends React.Component {
                         </ListItem>
                     ))}
                 </List>
-                <Fab color="primary" aria-label="Add" onClick={this.startNew()}>
-                    <AddIcon />
-                </Fab>
+
+                <NewLesson state={this.props.state} updateState={this.props.updateState}></NewLesson>
             </div>
         );
     }

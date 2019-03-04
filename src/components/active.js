@@ -71,7 +71,6 @@ class Active extends React.Component {
     Item(lesson, index) {
         // const lesson = props.lesson
         // const index = props.index
-        console.log('lesson', lesson)
         if (lesson.selected) {
             return (
                 <ListItem key={index}>
