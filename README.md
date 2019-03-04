@@ -3,7 +3,7 @@ Chrome extension to learn new languages by randomly replacing words on pages you
 
 ## To get working as an extension
 
-- Open chrome and navigate to chrome://extensions
+- Open chrome and navigate to [chrome://extensions](chrome://extensions)
 - Drag the build folder onto the page
 
 ### `npm run watch`
