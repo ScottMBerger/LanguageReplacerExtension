@@ -31,10 +31,8 @@ class Library extends React.Component {
     handleDelete = index => () => {
         const { lessons } = this.props.state;
         const newLessons = [...lessons];
-        console.log('del', index, newLessons)
         newLessons.splice(index, 1);
 
-        console.log('del2', index, newLessons)
         this.props.updateState({ lessons: newLessons })
     }
 

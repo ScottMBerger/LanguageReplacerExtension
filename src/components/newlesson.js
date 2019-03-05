@@ -1,3 +1,4 @@
+/*global chrome*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,6 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import ImportExportIcon from '@material-ui/icons/ImportExport';
 import NewInput from './newinput'
 import TextField from '@material-ui/core/TextField';
 
@@ -44,6 +46,36 @@ class NewLesson extends React.Component {
     handleClickOpen = () => {
         this.setState({ open: true });
     };
+    handleImportMemrise = () => {
+        // this.setState({ open: true });
+        function scrape() {
+            //You can play with your DOM here or check URL against your regex
+            let list = document.querySelector(".things")
+            if (!list) { return 'not on memrise' }
+            let defs = list.getElementsByClassName("thing")
+            let words = [];
+            if (defs) {
+                for (var i = 0; i < defs.length; i++) {
+                    if (defs[i]) {
+                        words.push({ input: ' ' + defs[i].getElementsByClassName('text')[3].innerText + ' ', output: ' ' + defs[i].getElementsByClassName('text')[1].innerText + ' ' })
+                    }
+                }
+                return words
+            }
+        }
+
+        //We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
+        chrome.tabs.executeScript({
+            code: '(' + scrape + ')();' //argument here is a string but function.toString() returns function's code
+        }, (result) => {
+            if (result) {
+                console.log(this.state.words, result)
+                console.log([...this.state.words, ...result])
+                this.setState({ words: [...this.state.words, ...result[0]] })
+            }
+
+        });
+    };
 
     handleClose = () => {
         this.setState({ open: false });
@@ -68,7 +100,7 @@ class NewLesson extends React.Component {
 
         const currentLesson = { name, "selected": false, "language": "Chinese", "active": true, words }
         newLessons.push(currentLesson)
-        console.log('saved les', newLessons)
+
         this.props.updateState({ lessons: newLessons })
         this.setState({
             open: false,
@@ -76,12 +108,14 @@ class NewLesson extends React.Component {
             name: ''
         });
     }
-
+    componentDidUpdate() {
+        console.log('component updated', this.state)
+    }
     render() {
         const { classes } = this.props;
         const { words } = this.state
-        console.log('render state', this.state.words)
-        console.log('r1')
+
+
         return (
             <div>
                 <Fab color="primary" aria-label="Add" onClick={this.handleClickOpen}>
@@ -107,7 +141,6 @@ class NewLesson extends React.Component {
                         </Toolbar>
                     </AppBar>
                     <List>
-
                         <ListItem button key="-1">
                             <TextField
                                 required
@@ -132,6 +165,10 @@ class NewLesson extends React.Component {
                         }
 
                     </List>
+
+                    <Fab color="primary" aria-label="Add" onClick={this.handleImportMemrise}>
+                        <ImportExportIcon />
+                    </Fab>
                 </Dialog>
             </div>
         );

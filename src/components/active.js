@@ -22,23 +22,10 @@ const styles = theme => ({
 });
 
 class Active extends React.Component {
-    // state = {
-    //     lessons: []
-    // };
-
     constructor(props) {
         super(props)
-        // chrome.storage.sync.get('lessons', (items) => {
-        //     console.log('WORDS2: Settings retrieved', items);
-        //     this.setState({
-        //         lessons: items.lessons
-        //     });
-        console.log('this props', this.props)
-        // });
     }
-    componentDidUpdate() {
-        console.log('component updated', this.props)
-    }
+
     handleDelete = index => () => {
         const { lessons } = this.props.state;
         const newLessons = [...lessons];
@@ -46,11 +33,6 @@ class Active extends React.Component {
         newLessons[index].selected = !newLessons[index].selected
 
         this.props.updateState({ lessons: newLessons })
-        // this.setState({
-        //     lessons: newLessons,
-        // }, () => {
-        //     chrome.storage.sync.set({ 'lessons': this.state.lessons })
-        // });
     }
 
     handleToggle = index => () => {
@@ -61,16 +43,9 @@ class Active extends React.Component {
 
 
         this.props.updateState({ lessons: newLessons })
-        // this.setState({
-        //     lessons: newLessons,
-        // }, () => {
-        //     chrome.storage.sync.set({ 'lessons': this.state.lessons })
-        // });
     };
 
     Item(lesson, index) {
-        // const lesson = props.lesson
-        // const index = props.index
         if (lesson.selected) {
             return (
                 <ListItem key={index}>
