@@ -54,7 +54,7 @@ class Active extends React.Component {
                         tabIndex={-1}
                         onClick={this.handleToggle(index)}
                     />
-                    <ListItemText primary={`${lesson.name}`} />
+                    <ListItemText primary={`${lesson.name} (${lesson.language})`} />
                     <ListItemSecondaryAction>
                         <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
                             <DeleteIcon />

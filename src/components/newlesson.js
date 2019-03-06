@@ -60,21 +60,35 @@ class NewLesson extends React.Component {
                         words.push({ input: ' ' + defs[i].getElementsByClassName('text')[3].innerText + ' ', output: ' ' + defs[i].getElementsByClassName('text')[1].innerText + ' ' })
                     }
                 }
-                return words
+                console.log('w', words)
+                const obj = { words: words, name: document.querySelector(".progress-box-title").innerText }
+                console.log('obj', obj)
+                return obj
             }
         }
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 
-        //We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
-        chrome.tabs.executeScript({
-            code: '(' + scrape + ')();' //argument here is a string but function.toString() returns function's code
-        }, (result) => {
-            if (result) {
-                console.log(this.state.words, result)
-                console.log([...this.state.words, ...result])
-                this.setState({ words: [...this.state.words, ...result[0]] })
+            // since only one tab should be active and in the current window at once
+            // the return variable should only have one entry
+            var activeTab = tabs[0];
+            var activeTabId = activeTab.id; // or do whatever you need
+            console.log('a tab', activeTab)
+            if (activeTab.url.includes('memrise.com/course/')) {
+                //We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
+                chrome.tabs.executeScript({
+                    code: '(' + scrape + ')();' //argument here is a string but function.toString() returns function's code
+                }, (result) => {
+                    if (result) {
+                        // console.log(this.state.words, result)
+                        // console.log([...this.state.words, ...result])
+                        console.log('ress', result)
+                        this.setState({ name: result[0].name, words: [...this.state.words, ...result[0].words] })
+                    }
+
+                });
             }
-
         });
+
     };
 
     handleClose = () => {
@@ -94,11 +108,11 @@ class NewLesson extends React.Component {
     };
 
     handleSave = () => {
-        const { lessons } = this.props.state;
+        const { lessons, language } = this.props.state;
         const { words, name } = this.state;
         const newLessons = [...lessons];
 
-        const currentLesson = { name, "selected": false, "language": "Chinese", "active": true, words }
+        const currentLesson = { name, "selected": false, "language": language, "active": true, words }
         newLessons.push(currentLesson)
 
         this.props.updateState({ lessons: newLessons })
@@ -147,6 +161,7 @@ class NewLesson extends React.Component {
                                 id="name"
                                 name="name"
                                 label="Lesson Name"
+                                value={this.state.name}
                                 className={classes.textField}
                                 defaultValue=""
                                 margin="normal"
@@ -166,8 +181,9 @@ class NewLesson extends React.Component {
 
                     </List>
 
-                    <Fab color="primary" aria-label="Add" onClick={this.handleImportMemrise}>
+                    <Fab variant="extended" color="primary" aria-label="Add" onClick={this.handleImportMemrise}>
                         <ImportExportIcon />
+                        Import from Memrise
                     </Fab>
                 </Dialog>
             </div>

@@ -6,14 +6,17 @@ import TabBar from './components/TabBar.js'
 
 class App extends Component {
   state = {
+    language: '',
     lessons: []
   };
 
   constructor() {
     super()
-    chrome.storage.sync.get('lessons', (items) => {
+    chrome.storage.sync.get(null, (items) => {
       this.setState({
-        lessons: items.lessons
+        lessons: items.lessons,
+        language: items.language,
+        languages: items.languages
       });
 
     });
