@@ -6,15 +6,22 @@ import TabBar from './components/TabBar.js'
 
 class App extends Component {
   state = {
-    language: '',
+    language: [],
     lessons: []
   };
 
   constructor() {
     super()
     chrome.storage.sync.get(null, (items) => {
+      const lessons = []
+      for (const lang of items.languages) {
+        for (const lesson of lang.lessons) {
+          lessons.push(items[lang.name + ' - ' + lesson])
+        }
+      }
+      console.log('my compiled lessons', lessons)
       this.setState({
-        lessons: items.lessons,
+        lessons: lessons,
         language: items.language,
         languages: items.languages
       });
@@ -22,10 +29,12 @@ class App extends Component {
     });
   }
 
-  updateState = obj => {
-    console.log('settings state')
+  updateState = (obj, noSync) => {
+    console.log('settings state', obj)
     this.setState(obj, () => {
-      chrome.storage.sync.set(obj)
+      if (!noSync) {
+        chrome.storage.sync.set(obj)
+      }
     });
   }
 

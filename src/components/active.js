@@ -6,14 +6,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Checkbox from '@material-ui/core/Checkbox';
-import Avatar from '@material-ui/core/Avatar';
-
 import DeleteIcon from '@material-ui/icons/Delete';
-
-
 import IconButton from '@material-ui/core/IconButton';
+
 const styles = theme => ({
     root: {
         width: '100%',
@@ -26,23 +22,24 @@ class Active extends React.Component {
         super(props)
     }
 
-    handleDelete = index => () => {
-        const { lessons } = this.props.state;
+    handleDelete = (index, name) => () => {
+        const { lessons, language } = this.props.state;
         const newLessons = [...lessons];
 
         newLessons[index].selected = !newLessons[index].selected
 
-        this.props.updateState({ lessons: newLessons })
+        chrome.storage.sync.set({ [language + ' - ' + name]: newLessons[index] })
+        this.props.updateState({ lessons: newLessons }, true)
     }
 
-    handleToggle = index => () => {
-        const { lessons } = this.props.state;
+    handleToggle = (index, name) => () => {
+        const { lessons, language } = this.props.state;
         const newLessons = [...lessons];
 
         newLessons[index].active = !newLessons[index].active
 
-
-        this.props.updateState({ lessons: newLessons })
+        chrome.storage.sync.set({ [language + ' - ' + name]: newLessons[index] })
+        this.props.updateState({ lessons: newLessons }, true)
     };
 
     Item(lesson, index) {
@@ -52,11 +49,11 @@ class Active extends React.Component {
                     <Checkbox
                         checked={lesson.active}
                         tabIndex={-1}
-                        onClick={this.handleToggle(index)}
+                        onClick={this.handleToggle(index, lesson.name)}
                     />
                     <ListItemText primary={`${lesson.name} (${lesson.language})`} />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
+                        <IconButton aria-label="Comments" onClick={this.handleDelete(index, lesson.name)}>
                             <DeleteIcon />
                         </IconButton>
                     </ListItemSecondaryAction>

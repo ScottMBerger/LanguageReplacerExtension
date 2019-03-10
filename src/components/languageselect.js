@@ -64,7 +64,7 @@ class LanguageSelect extends React.Component {
                     >
                         {languages.reverse()
                             .map(
-                                (curr, index) => <MenuItem value={curr}>{curr}</MenuItem>
+                                (curr, index) => <MenuItem value={curr.name}>{curr.name}</MenuItem>
                             )
                         }
 

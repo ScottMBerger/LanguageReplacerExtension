@@ -108,14 +108,28 @@ class NewLesson extends React.Component {
     };
 
     handleSave = () => {
-        const { lessons, language } = this.props.state;
+        Array.prototype.getIndexBy = function (name, value) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i][name] == value) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        const { lessons, language, languages } = this.props.state;
         const { words, name } = this.state;
         const newLessons = [...lessons];
+        const newLanguages = [...languages]
+        console.log('newla', newLanguages)
+        console.log('index', newLanguages.getIndexBy('name', language))
+        newLanguages[newLanguages.getIndexBy('name', language)].lessons.push(name)
 
-        const currentLesson = { name, "selected": false, "language": language, "active": true, words }
+        const currentLesson = { name, "selected": true, "language": language, "active": true, words }
         newLessons.push(currentLesson)
 
-        this.props.updateState({ lessons: newLessons })
+        this.props.updateState({ [language + ' - ' + name]: currentLesson, languages: newLanguages })
+        this.props.updateState({ lessons: newLessons }, true)
         this.setState({
             open: false,
             words: [],

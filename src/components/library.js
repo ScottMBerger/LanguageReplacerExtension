@@ -14,6 +14,15 @@ import IconButton from '@material-ui/core/IconButton';
 import NewLesson from './newlesson';
 import LanguageSelect from './languageselect';
 
+
+Array.prototype.getIndexBy = function (name, value) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i][name] == value) {
+            return i;
+        }
+    }
+    return -1;
+}
 const styles = theme => ({
     root: {
         width: '100%',
@@ -29,38 +38,33 @@ class Library extends React.Component {
         super(props)
     }
 
-    handleDelete = index => () => {
-        const { lessons } = this.props.state;
+    handleDelete = name => () => {
+        const { lessons, language, languages } = this.props.state;
         const newLessons = [...lessons];
+        const newLanguages = [...languages]
+        const index = newLessons.getIndexBy('name', name)
         newLessons.splice(index, 1);
 
-        this.props.updateState({ lessons: newLessons })
+        this.props.updateState({ lessons: newLessons }, true)
+
+        newLanguages[newLanguages.getIndexBy('name', language)].lessons.splice(newLanguages[newLanguages.getIndexBy('name', language)].lessons.indexOf(name), 1)
+        this.props.updateState({ languages: newLanguages })
     }
 
-    handleActive = index => () => {
-        const { lessons } = this.props.state;
+    handleActive = name => () => {
+        const { lessons, language } = this.props.state;
         const newLessons = [...lessons];
-
+        const index = newLessons.getIndexBy('name', name)
         newLessons[index].selected = !newLessons[index].selected
 
-        this.props.updateState({ lessons: newLessons })
+        chrome.storage.sync.set({ [language + ' - ' + name]: newLessons[index] })
+        this.props.updateState({ lessons: newLessons }, true)
     };
-
-    startNew() {
-
-    }
-
-
-    componentDidUpdate() {
-        console.log('component updated', this.props)
-    }
 
     render() {
         const { classes } = this.props;
         const { lessons, language } = this.props.state;
-        // const filteredLessons = lessons.filter((lesson) => {
-        //     return lesson.language == language
-        // })
+
         function PlusMinus(props) {
             if (props.selected) {
                 return <RemoveIcon />
@@ -73,12 +77,12 @@ class Library extends React.Component {
             if (lesson.language == language) {
                 return (
                     <ListItem key={index}>
-                        <IconButton aria-label="Comments" onClick={this.handleActive(index)}>
+                        <IconButton aria-label="Comments" onClick={this.handleActive(lesson.name)}>
                             <PlusMinus selected={lesson.selected} />
                         </IconButton>
                         <ListItemText primary={`${lesson.name}`} />
                         <ListItemSecondaryAction>
-                            <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
+                            <IconButton aria-label="Comments" onClick={this.handleDelete(lesson.name)}>
                                 <DeleteIcon />
                             </IconButton>
                         </ListItemSecondaryAction>

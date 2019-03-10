@@ -1,10 +1,17 @@
 (function () {
-    chrome.storage.sync.get('lessons', function (items) {
-
+    chrome.storage.sync.get(null, function (items) {
+        const lessons = []
+        for (const lang of items.languages) {
+            for (const lesson of lang.lessons) {
+                lessons.push(items[lang.name + ' - ' + lesson])
+            }
+        }
         console.log('WORDS: Settings retrieved', items);
+        console.log('resulted', lessons)
         let selectedLessons = []
-        for (const lesson of items.lessons) {
+        for (const lesson of lessons) {
             if (lesson.selected && lesson.active) {
+                console.log('le', lesson)
                 selectedLessons = [...selectedLessons, ...lesson.words]
             }
         }

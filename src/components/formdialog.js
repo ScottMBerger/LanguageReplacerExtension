@@ -28,7 +28,7 @@ export default class FormDialog extends React.Component {
     };
 
     createNewLanguage = () => {
-        this.props.updateState({ language: this.state.field, languages: [...this.props.state.languages, this.state.field] });
+        this.props.updateState({ language: this.state.field, languages: [...this.props.state.languages, { name: this.state.field, lessons: [] }] });
         this.setState({ open: false });
     }
 
