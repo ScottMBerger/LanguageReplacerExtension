@@ -19,8 +19,9 @@ class App extends Component {
           lessons.push(items[lang.name + ' - ' + lesson])
         }
       }
-      console.log('my compiled lessons', lessons)
       this.setState({
+        global: items.global,
+        domains: items.domains,
         lessons: lessons,
         language: items.language,
         languages: items.languages
@@ -30,7 +31,6 @@ class App extends Component {
   }
 
   updateState = (obj, noSync) => {
-    console.log('settings state', obj)
     this.setState(obj, () => {
       if (!noSync) {
         chrome.storage.sync.set(obj)

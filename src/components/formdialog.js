@@ -16,7 +16,6 @@ export default class FormDialog extends React.Component {
 
     constructor(props) {
         super(props)
-        console.log('props', this.props)
     }
 
     handleClickOpen = () => {

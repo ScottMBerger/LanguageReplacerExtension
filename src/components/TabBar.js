@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import './TabBar.css';
 import Library from './library.js'
 import Active from './active.js'
+import Settings from './settings';
 
 function TabContainer({ children, dir }) {
     return (
@@ -70,7 +71,7 @@ class TabBar extends React.Component {
                 >
                     <TabContainer dir={theme.direction}><Active state={this.props.state} updateState={this.props.updateState}></Active></TabContainer>
                     <TabContainer dir={theme.direction}><Library state={this.props.state} updateState={this.props.updateState}></Library></TabContainer>
-                    <TabContainer dir={theme.direction}>Item Three</TabContainer>
+                    <TabContainer dir={theme.direction}><Settings state={this.props.state} updateState={this.props.updateState}></Settings></TabContainer>
                 </SwipeableViews>
             </div>
         );

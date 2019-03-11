@@ -57,12 +57,24 @@ class NewLesson extends React.Component {
             if (defs) {
                 for (var i = 0; i < defs.length; i++) {
                     if (defs[i]) {
-                        words.push({ input: ' ' + defs[i].getElementsByClassName('text')[3].innerText + ' ', output: ' ' + defs[i].getElementsByClassName('text')[1].innerText + ' ' })
+                        let input = []
+                        let output = []
+                        try {
+                            input = defs[i].getElementsByClassName('text')[3].innerText
+                            output = defs[i].getElementsByClassName('text')[1].innerText.split('; ');
+                        } catch (e) {
+                        }
+                        for (const index in output) {
+                            try {
+                                words.push({ input: ' ' + input + ' ', output: ' ' + output[index] + ' ' })
+                            } catch (e) {
+
+                            }
+                        }
+
                     }
                 }
-                console.log('w', words)
                 const obj = { words: words, name: document.querySelector(".progress-box-title").innerText }
-                console.log('obj', obj)
                 return obj
             }
         }
@@ -72,7 +84,6 @@ class NewLesson extends React.Component {
             // the return variable should only have one entry
             var activeTab = tabs[0];
             var activeTabId = activeTab.id; // or do whatever you need
-            console.log('a tab', activeTab)
             if (activeTab.url.includes('memrise.com/course/')) {
                 //We have permission to access the activeTab, so we can call chrome.tabs.executeScript:
                 chrome.tabs.executeScript({
@@ -81,7 +92,6 @@ class NewLesson extends React.Component {
                     if (result) {
                         // console.log(this.state.words, result)
                         // console.log([...this.state.words, ...result])
-                        console.log('ress', result)
                         this.setState({ name: result[0].name, words: [...this.state.words, ...result[0].words] })
                     }
 
@@ -121,8 +131,6 @@ class NewLesson extends React.Component {
         const { words, name } = this.state;
         const newLessons = [...lessons];
         const newLanguages = [...languages]
-        console.log('newla', newLanguages)
-        console.log('index', newLanguages.getIndexBy('name', language))
         newLanguages[newLanguages.getIndexBy('name', language)].lessons.push(name)
 
         const currentLesson = { name, "selected": true, "language": language, "active": true, words }
@@ -136,9 +144,7 @@ class NewLesson extends React.Component {
             name: ''
         });
     }
-    componentDidUpdate() {
-        console.log('component updated', this.state)
-    }
+
     render() {
         const { classes } = this.props;
         const { words } = this.state

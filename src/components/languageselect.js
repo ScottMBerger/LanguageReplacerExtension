@@ -46,7 +46,6 @@ class LanguageSelect extends React.Component {
     render() {
         const { classes } = this.props;
         const { language, languages } = this.props.state
-        console.log('render', this.props)
         return (
             <form autoComplete="off">
                 <FormControl className={classes.formControl}>

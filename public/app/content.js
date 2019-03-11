@@ -1,28 +1,42 @@
 (function () {
     chrome.storage.sync.get(null, function (items) {
+        let currentDomain = document.domain;
+        currentDomain = currentDomain.split('.')
+        if (currentDomain.length > 2) {
+            currentDomain.splice(0, 1)
+        }
+        currentDomain = currentDomain.join('.');
+        if (!items.global && !items.domains.includes(currentDomain)) {
+            console.log('content not allowed by user ')
+            chrome.runtime.sendMessage({
+                action: 'updateIcon',
+                value: false
+            });
+            return;
+        }
+        chrome.runtime.sendMessage({
+            action: 'updateIcon',
+            value: true
+        });
         const lessons = []
         for (const lang of items.languages) {
             for (const lesson of lang.lessons) {
                 lessons.push(items[lang.name + ' - ' + lesson])
             }
         }
-        console.log('WORDS: Settings retrieved', items);
-        console.log('resulted', lessons)
+
         let selectedLessons = []
         for (const lesson of lessons) {
             if (lesson.selected && lesson.active) {
-                console.log('le', lesson)
                 selectedLessons = [...selectedLessons, ...lesson.words]
             }
         }
-        const words = Object.assign(...selectedLessons);
+
         start(selectedLessons);
     });
 }());
 
 function start(words) {
-    console.time('contentTimer')
-    console.log('doing these', words)
     let dataStore = JSON.parse(localStorage.getItem('languageData')) || {}
     let sortable = [];
     for (let count in dataStore) {
@@ -80,7 +94,6 @@ function start(words) {
             entries => {
                 if (entries[0].intersectionRatio > 0) {
                     original.innerHTML = replaceBulk(original.innerHTML);
-                    console.log('replaced this one');
                     intersection.unobserve(original);
                 }
             },

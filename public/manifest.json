@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
-  "name": "Word Replacer",
-  "description": "Learn new words",
+  "name": "Learn a Language: Passively",
+  "description": "Learn a new language by doing what you already normally do. Replaces words with the foreign language randomly on your page. Hover to see the translation.",
   "version": "0.0.1",
   "browser_action": {
     "default_popup": "index.html",
