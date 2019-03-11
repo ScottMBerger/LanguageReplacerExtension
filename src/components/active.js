@@ -90,6 +90,7 @@ class Active extends React.Component {
 
         return (
             <List dense className={classes.root}>
+                {/* <ListSubheader classes={css}>{`I'm sticky`}</ListSubheader> */}
                 {this.props.state.lessons
                     .map(
                         (lesson, index) => this.Item(lesson, index)

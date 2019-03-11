@@ -13,6 +13,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import NewDomain from './newdomain';
+import { ListSubheader } from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -55,10 +56,15 @@ class Settings extends React.Component {
     render() {
         const { classes, state } = this.props;
         console.log('my settings state', state)
-        const DomainList = () => {
+
+        const Domains = () => {
             if (!state.global) {
                 return (
-                    <NewDomain state={state} updateState={this.props.updateState}></NewDomain>
+                    <List dense className={classes.root}>
+                        <ListSubheader >Enable on these domains</ListSubheader>
+                        <NewDomain state={state} updateState={this.props.updateState}></NewDomain>
+                        <DomainsList></DomainsList>
+                    </List>
                 )
             } else {
                 return null
@@ -66,30 +72,21 @@ class Settings extends React.Component {
         }
 
         const DomainsList = () => {
-            if (!state.global) {
-                return state.domains.map((domain, index) =>
-                    (<ListItem key={index}>
-                        <ListItemText primary={`${domain}`} />
-                        <ListItemSecondaryAction>
-                            <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </ListItemSecondaryAction>
-                    </ListItem>))
-            } else {
-                return null
-            }
-
+            return state.domains.map((domain, index) =>
+                (<ListItem key={index}>
+                    <ListItemText primary={`${domain}`} />
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="Comments" onClick={this.handleDelete(index)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>))
         }
 
         return (
             <React.Fragment>
                 <DomainSwitch state={this.props.state} updateState={this.props.updateState}></DomainSwitch>
-                <List dense className={classes.root}>
-                    <DomainList></DomainList>
-                    <DomainsList></DomainsList>
-
-                </List>
+                <Domains></Domains>
             </React.Fragment>
         );
     }
