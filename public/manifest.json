@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Learn a Language: Passively",
-  "description": "Learn a new language by doing what you already normally do. Replaces words with the foreign language randomly on your page. Hover to see the translation.",
+  "description": "Learn a new language by doing what you already normally do. Replaces words with the foreign language randomly on your page.",
   "version": "0.0.1",
   "browser_action": {
     "default_popup": "index.html",
@@ -31,8 +31,6 @@
   "content_security_policy": "script-src 'self' 'sha256-GgRxrVOKNdB4LrRsVPDSbzvfdV4UqglmviH9GoBJ5jk='; object-src 'self'",
   "permissions": [
     "activeTab",
-    "webRequest",
-    "webRequestBlocking",
     "storage"
   ]
 }

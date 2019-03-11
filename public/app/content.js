@@ -37,6 +37,7 @@
 }());
 
 function start(words) {
+    console.time('contentTimer');
     let dataStore = JSON.parse(localStorage.getItem('languageData')) || {}
     let sortable = [];
     for (let count in dataStore) {
