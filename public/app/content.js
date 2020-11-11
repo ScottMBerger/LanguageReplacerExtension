@@ -54,12 +54,12 @@ function start(words) {
         }
     }
 
-    let sheet = window.document.styleSheets[0];
-    if (sheet) {
-        sheet.insertRule('span.showHover{display:none;}', sheet.cssRules.length);
-        sheet.insertRule('.languageTranslate:hover span.showInitial{display:none;}', sheet.cssRules.length);
-        sheet.insertRule('.languageTranslate:hover span.showHover{display:inline;}', sheet.cssRules.length);
-    }
+    // let sheet = window.document.styleSheets[0];
+    // if (sheet) {
+    //     sheet.insertRule('span.showHover{display:none;}');
+    //     sheet.insertRule('.languageTranslate:hover span.showInitial{display:none;}');
+    //     sheet.insertRule('.languageTranslate:hover span.showHover{display:inline;}');
+    // }
 
 
     let language = [], english = [], counter = 0;

@@ -1,0 +1,3 @@
+span.showHover{display:none;}
+.languageTranslate:hover span.showInitial{display:none;}
+.languageTranslate:hover span.showHover{display:inline;}
